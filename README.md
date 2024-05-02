@@ -1,1 +1,1 @@
-# AT3-N1---Atividade-pr-tica-coletiva---Bimestre-N1
+# AT3-N1---Atividade-prática-coletiva---Bimestre-N1
