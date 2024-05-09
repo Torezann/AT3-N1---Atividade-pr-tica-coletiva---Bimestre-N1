@@ -1,4 +1,4 @@
-package Trabalho_Grupo;
+package sistema_hotel_t4;
 
 import java.util.Random;
 
