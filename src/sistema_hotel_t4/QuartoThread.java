@@ -8,6 +8,7 @@ class QuartoThread extends Thread {
     private boolean disponivel;
     private boolean sujo;
     private boolean chaveNaRecepcao;
+    private boolean limpoAvisado = false; // Adicionando a variável limpoAvisado
     private List<HospedeThread> hospedes;
     private List<CamareiraThread> camareiras;
 
@@ -65,10 +66,11 @@ class QuartoThread extends Thread {
         if (sujo) {
             System.out.println("Camareira está limpando o Quarto " + numero + "...");
             sujo = false;
-        } else {
+        } else if (!limpoAvisado) {
             System.out.println("Quarto " + numero + " já está limpo.");
+            limpoAvisado = true; // Alterando limpoAvisado para true após a impressão da mensagem
         }
-    }    
+    }   
 
     public synchronized void devolverChave() {
         if (chaveNaRecepcao) {
