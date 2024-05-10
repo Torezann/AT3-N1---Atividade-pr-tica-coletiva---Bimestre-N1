@@ -1,6 +1,7 @@
 package sistema_hotel_t4;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.List;
 
 public class Hotel {
@@ -8,6 +9,7 @@ public class Hotel {
     private List<HospedeThread> filaEspera;
     private List<HospedeThread> reclamacoes;
     List<CamareiraThread> camareiras;
+    private AtomicInteger totalClientesAtendidos = new AtomicInteger(0); // Usamos AtomicInteger para garantir atomicidade das operações
 
     public Hotel(int numeroQuartos) {
         quartos = new ArrayList<>();
@@ -20,6 +22,10 @@ public class Hotel {
     }
 
     public synchronized QuartoThread reservarQuarto(HospedeThread hospede) {
+        if (totalClientesAtendidos.get() >= 50) {
+            System.out.println("Limite de 50 clientes atendidos alcançado. Encerrando execução...");
+            return null; // Encerra a execução
+        }
         for (QuartoThread quarto : quartos) {
             if (quarto.isDisponivel()) {
                 if (quarto.getHospedes().size() < 4) {
@@ -55,6 +61,12 @@ public class Hotel {
         for (CamareiraThread camareira : camareiras) {
             camareira.notificarLimpeza(quarto);
         }
+
+        if (totalClientesAtendidos.incrementAndGet() >= 50) {
+            System.out.println("Limite de 50 clientes atendidos alcançado. Encerrando execução...");
+            // Encerra a execução após atingir o limite
+            System.exit(0);
+        }
     }    
     
 
@@ -75,6 +87,12 @@ public class Hotel {
             reservarQuarto(proximoHospede);
         } else {
             System.out.println("Recepcionista " + recepcionista.getId() + " está aguardando clientes.");
+        }
+
+        if (totalClientesAtendidos.incrementAndGet() >= 50) {
+            System.out.println("Limite de 50 clientes atendidos alcançado. Encerrando execução...");
+            // Encerra a execução após atingir o limite
+            System.exit(0);
         }
     }
 }
